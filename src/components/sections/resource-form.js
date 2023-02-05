@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import {
   Flex,
   Box,
@@ -11,11 +11,11 @@ import {
   Textarea,
   useToast,
   Spacer,
-} from "@chakra-ui/react"
-import { useSession } from "next-auth/react"
-import LoadingPage from "src/components/ui/loadingPage"
+} from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import LoadingPage from "src/components/ui/loadingPage";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ResourceForm({ article, categories }) {
   const {
@@ -23,11 +23,11 @@ export default function ResourceForm({ article, categories }) {
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm()
+  } = useForm();
 
-  const { data: session, status } = useSession()
-  const toast = useToast()
-  const statuses = ["success", "error", "warning", "info"]
+  const { data: session, status } = useSession();
+  const toast = useToast();
+  const statuses = ["success", "error", "warning", "info"];
 
   async function onSubmit(resourceData) {
     const res = await fetch(`${API_URL}/api/resources`, {
@@ -42,22 +42,22 @@ export default function ResourceForm({ article, categories }) {
           user: session?.user?.id,
         },
       }),
-    })
+    });
 
-    const response = await res.json()
-    console.log(response)
+    const response = await res.json();
+    console.log(response);
 
     if (response.error) {
       const errorDetails =
         typeof response.error.details === "object"
           ? response.error.name
-          : response.error.details
+          : response.error.details;
 
       toast({
         title: errorDetails,
         description: response.error.message,
         status: statuses[1],
-      })
+      });
     } else {
       const res = await fetch(`${API_URL}/api/resource-instances`, {
         method: "POST",
@@ -71,16 +71,16 @@ export default function ResourceForm({ article, categories }) {
             resource: response?.data?.id,
           },
         }),
-      })
+      });
 
-      const resourceInstancesResponse = await res.json()
-      console.log(resourceInstancesResponse)
+      const resourceInstancesResponse = await res.json();
+      console.log(resourceInstancesResponse);
 
       toast({
         title: "Resource sent",
         description: "Your new resource has been submitted. Many thanks!",
         status: statuses[0],
-      })
+      });
 
       reset({
         title: "",
@@ -88,11 +88,11 @@ export default function ResourceForm({ article, categories }) {
         link: "",
         description: "",
         prerequisite: "",
-      })
+      });
     }
   }
 
-  if (status === "loading") return <LoadingPage />
+  if (status === "loading") return <LoadingPage />;
 
   return (
     <Flex align="center" justifyContent="center" mx="auto">
@@ -130,7 +130,7 @@ export default function ResourceForm({ article, categories }) {
                       <option value={category?.id} key={category?.id}>
                         {category?.attributes?.title}
                       </option>
-                    )
+                    );
                   })}
                 </Select>
                 <FormErrorMessage>
@@ -227,7 +227,7 @@ export default function ResourceForm({ article, categories }) {
                 type="submit"
                 isDisabled={isSubmitting}
                 onClick={() => {
-                  register("writer", { value: 1 })
+                  register("writer", { value: 1 });
                 }}
               >
                 Submit
@@ -237,5 +237,5 @@ export default function ResourceForm({ article, categories }) {
         </Box>
       </Box>
     </Flex>
-  )
+  );
 }

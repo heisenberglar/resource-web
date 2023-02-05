@@ -1,7 +1,7 @@
-import NextAuth from "next-auth"
-import LinkedinProvider from "next-auth/providers/linkedin"
-import GoogleProvider from "next-auth/providers/google"
-import qs from "qs"
+import NextAuth from "next-auth";
+import LinkedinProvider from "next-auth/providers/linkedin";
+import GoogleProvider from "next-auth/providers/google";
+import qs from "qs";
 
 export default NextAuth({
   providers: [
@@ -16,15 +16,15 @@ export default NextAuth({
     session: async ({ session, token }) => {
       // ...
 
-      return session
+      return session;
     },
     jwt: async ({ token, user, account, profile, isNewUser }) => {
       // ...
 
-      return Promise.resolve(token)
+      return Promise.resolve(token);
     },
   },
   pages: {
     newUser: "/settings/profile",
   },
-})
+});

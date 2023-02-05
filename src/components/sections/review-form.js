@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -10,11 +10,11 @@ import {
   Flex,
   useToast,
   Input,
-} from "@chakra-ui/react"
-import { useSession } from "next-auth/react"
-import LoginPrompt from "../ui/loginPrompt"
+} from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import LoginPrompt from "../ui/loginPrompt";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ReviewForm(props) {
   const {
@@ -22,12 +22,12 @@ export default function ReviewForm(props) {
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm()
+  } = useForm();
 
-  const { resourceInstance } = props
-  const toast = useToast()
-  const statuses = ["success", "error", "warning", "info"]
-  const { data: session } = useSession()
+  const { resourceInstance } = props;
+  const toast = useToast();
+  const statuses = ["success", "error", "warning", "info"];
+  const { data: session } = useSession();
 
   async function onSubmit(reviewData) {
     const res = await fetch(`${API_URL}/api/reviews`, {
@@ -41,28 +41,28 @@ export default function ReviewForm(props) {
           reviewer: session?.user?.id,
         },
       }),
-    })
+    });
 
-    const response = await res.json()
-    console.log(response)
+    const response = await res.json();
+    console.log(response);
 
     if (response.error) {
       const errorDetails =
         typeof response.error.details === "object"
           ? response.error.name
-          : response.error.details
+          : response.error.details;
 
       toast({
         title: response.error.message,
         description: errorDetails,
         status: statuses[1],
-      })
+      });
     } else {
       toast({
         title: "Review sent",
         description: "Your review has been submitted. Many thanks!",
         status: statuses[0],
-      })
+      });
 
       reset({
         comment: {
@@ -70,12 +70,12 @@ export default function ReviewForm(props) {
           content: "",
         },
         rating: "",
-      })
+      });
     }
   }
 
   if (!session) {
-    return <LoginPrompt />
+    return <LoginPrompt />;
   }
 
   return (
@@ -154,7 +154,7 @@ export default function ReviewForm(props) {
               type="submit"
               isDisabled={isSubmitting}
               onClick={() => {
-                register("resource_instance", { value: resourceInstance.id })
+                register("resource_instance", { value: resourceInstance.id });
               }}
             >
               Submit
@@ -163,5 +163,5 @@ export default function ReviewForm(props) {
         </form>
       </Box>
     </Flex>
-  )
+  );
 }

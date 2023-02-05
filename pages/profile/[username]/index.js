@@ -1,5 +1,5 @@
-import NextLink from "next/link"
-import Layout from "src/components/layouts/layout"
+import NextLink from "next/link";
+import Layout from "src/components/layouts/layout";
 import {
   Flex,
   Box,
@@ -15,19 +15,19 @@ import {
   Divider,
   Link,
   Button,
-} from "@chakra-ui/react"
-import qs from "qs"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
-import ReviewCard from "src/components/sections/review-card"
-import { faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-dayjs.extend(relativeTime)
+} from "@chakra-ui/react";
+import qs from "qs";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import ReviewCard from "src/components/sections/review-card";
+import { faLinkedin, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+dayjs.extend(relativeTime);
 
 export default function Profile({ user, articles, reviews }) {
-  const timeSinceJoined = dayjs(user.createdAt).fromNow(true)
+  const timeSinceJoined = dayjs(user.createdAt).fromNow(true);
 
-  const formatUrl = (url) => url?.replace(/^https?:\/\//, "")
+  const formatUrl = (url) => url?.replace(/^https?:\/\//, "");
 
   return (
     <Flex flexWrap="wrap" maxW="1200px" mx="auto">
@@ -98,8 +98,8 @@ export default function Profile({ user, articles, reviews }) {
                   articles.map((article) => {
                     const lastUpdated =
                       article?.attributes?.updatedAt ||
-                      article?.attributes?.createdAt
-                    const timeSinceUpdate = dayjs(lastUpdated).fromNow(true)
+                      article?.attributes?.createdAt;
+                    const timeSinceUpdate = dayjs(lastUpdated).fromNow(true);
 
                     return (
                       <LinkBox as="article" key={article?.id} w="100%">
@@ -143,7 +143,7 @@ export default function Profile({ user, articles, reviews }) {
                         )}
                         <Divider my="1rem" />
                       </LinkBox>
-                    )
+                    );
                   })
                 )}
               </Flex>
@@ -168,7 +168,7 @@ export default function Profile({ user, articles, reviews }) {
                       </Heading>
                       <ReviewCard review={review} key={index} />
                     </Box>
-                  )
+                  );
                 })
               )}
             </TabPanel>
@@ -176,11 +176,11 @@ export default function Profile({ user, articles, reviews }) {
         </Tabs>
       </Layout>
     </Flex>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const reviewsQuery = qs.stringify(
     {
@@ -197,17 +197,17 @@ export async function getServerSideProps(context) {
     {
       encodeValuesOnly: true,
     }
-  )
+  );
 
   const user = await fetch(API_URL + `/api/users?${reviewsQuery}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-  })
-  const userJson = await user.json()
+  });
+  const userJson = await user.json();
 
-  if (!userJson?.length) return { props: {}, notFound: true }
+  if (!userJson?.length) return { props: {}, notFound: true };
 
   const userArticlesQuery = qs.stringify(
     {
@@ -229,7 +229,7 @@ export async function getServerSideProps(context) {
     {
       encodeValuesOnly: true,
     }
-  )
+  );
 
   const userArticles = await fetch(
     API_URL + `/api/articles?${userArticlesQuery}`,
@@ -239,8 +239,8 @@ export async function getServerSideProps(context) {
         "Content-Type": "application/json",
       },
     }
-  )
-  const userArticlesJson = await userArticles.json()
+  );
+  const userArticlesJson = await userArticles.json();
 
   const userReviewsQuery = qs.stringify(
     {
@@ -269,7 +269,7 @@ export async function getServerSideProps(context) {
     {
       encodeValuesOnly: true,
     }
-  )
+  );
 
   const userReviews = await fetch(
     API_URL + `/api/reviews?${userReviewsQuery}`,
@@ -279,8 +279,8 @@ export async function getServerSideProps(context) {
         "Content-Type": "application/json",
       },
     }
-  )
-  const userReviewsJson = await userReviews.json()
+  );
+  const userReviewsJson = await userReviews.json();
 
   return {
     props: {
@@ -288,5 +288,5 @@ export async function getServerSideProps(context) {
       articles: userArticlesJson?.data,
       reviews: userReviewsJson?.data,
     },
-  }
+  };
 }

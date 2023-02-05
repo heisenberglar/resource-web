@@ -1,5 +1,5 @@
-import Layout from "src/components/layouts/layout"
-import { useForm } from "react-hook-form"
+import Layout from "src/components/layouts/layout";
+import { useForm } from "react-hook-form";
 import {
   Flex,
   Box,
@@ -12,13 +12,13 @@ import {
   useToast,
   Button,
   Textarea,
-} from "@chakra-ui/react"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/router"
-import BreadCrumb from "src/components/ui/breadcrumb"
-import LoginPrompt from "src/components/ui/loginPrompt"
+} from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import BreadCrumb from "src/components/ui/breadcrumb";
+import LoginPrompt from "src/components/ui/loginPrompt";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SubmitArticle({ categories }) {
   const {
@@ -26,27 +26,27 @@ export default function SubmitArticle({ categories }) {
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm()
+  } = useForm();
 
-  const router = useRouter()
-  const toast = useToast()
-  const statuses = ["success", "error", "warning", "info"]
+  const router = useRouter();
+  const toast = useToast();
+  const statuses = ["success", "error", "warning", "info"];
 
-  const { data: session, loading } = useSession()
+  const { data: session, loading } = useSession();
 
   if (!session || status === "loading") {
     return (
       <Layout title={"Post a new article"}>
         <LoginPrompt />
       </Layout>
-    )
+    );
   }
 
   async function onSubmit(articleData) {
-    articleData.writer = session?.user?.id
+    articleData.writer = session?.user?.id;
 
     if (!articleData.target) {
-      articleData.target = articleData.intro.slice(0, 160)
+      articleData.target = articleData.intro.slice(0, 160);
     }
 
     const res = await fetch(`${API_URL}/api/articles`, {
@@ -55,32 +55,32 @@ export default function SubmitArticle({ categories }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ data: articleData }),
-    })
+    });
 
-    const response = await res.json()
-    console.log(response)
+    const response = await res.json();
+    console.log(response);
 
     if (response.error) {
-      console.log(response.error)
+      console.log(response.error);
       toast({
         title: response.error.message,
         description: "We're not in the right place. Let's try that again.",
         status: statuses[1],
         position: "top-right",
-      })
+      });
     } else {
       toast({
         title: "Article posted",
         description: `Your article has been submitted and is pending review. Many thanks!`,
         status: statuses[0],
         position: "top-right",
-      })
+      });
 
       reset({
         title: "",
         category: "",
         intro: "",
-      })
+      });
     }
   }
 
@@ -125,7 +125,7 @@ export default function SubmitArticle({ categories }) {
                       <option key={category?.id} value={category?.id}>
                         {category?.attributes?.title}
                       </option>
-                    )
+                    );
                   })}
                 </Select>
                 <FormErrorMessage>
@@ -161,23 +161,23 @@ export default function SubmitArticle({ categories }) {
         </Box>
       </Flex>
     </Layout>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const categories = await fetch(API_URL + `/api/categories`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-  })
-  const categoriesJson = await categories?.json()
+  });
+  const categoriesJson = await categories?.json();
 
   return {
     props: {
       categories: categoriesJson?.data,
     },
-  }
+  };
 }

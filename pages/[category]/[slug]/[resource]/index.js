@@ -58,7 +58,7 @@ export async function getServerSideProps(context) {
   const fetchedReviews = await fetch(API_URL + `/api/reviews?${reviewsQuery}`, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
   });
   const reviews = await fetchedReviews.json();
@@ -68,7 +68,7 @@ export async function getServerSideProps(context) {
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     }
   );

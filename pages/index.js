@@ -6,29 +6,29 @@ import {
   useMediaQuery,
   keyframes,
   useColorMode,
-} from "@chakra-ui/react"
-import NextImage from "next/image"
-import NextButton from "src/components/ui/next-button"
-import { NextSeo } from "next-seo"
-import { useRef, Fragment, useState } from "react"
-import { useInView } from "react-intersection-observer"
+} from "@chakra-ui/react";
+import NextImage from "next/image";
+import NextButton from "src/components/ui/next-button";
+import { NextSeo } from "next-seo";
+import { useRef, Fragment, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function HomePage({ categories }) {
-  const { colorMode, toggleColorMode } = useColorMode()
-  const myRef = useRef(null)
+  const { colorMode, toggleColorMode } = useColorMode();
+  const myRef = useRef(null);
   const executeScroll = () => {
-    myRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
-  }
-  const textColor = colorMode === "light" ? "gray.100" : "#000011"
+    myRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const textColor = colorMode === "light" ? "gray.100" : "#000011";
 
-  const [isDesktop] = useMediaQuery("(min-width: 800px)")
+  const [isDesktop] = useMediaQuery("(min-width: 800px)");
   const seoDescription =
-    "dynarank is the gateway to the best resources you can find to learn a topic."
+    "dynarank is the gateway to the best resources you can find to learn a topic.";
 
   const slide = (direction, magnitude) => keyframes`
     from { transform: ${direction}(${magnitude}); }
     to { transform: ${direction}(0px); }
-  `
+  `;
 
   const {
     ref: inViewRef,
@@ -36,7 +36,7 @@ export default function HomePage({ categories }) {
     entry,
   } = useInView({
     threshold: 0,
-  })
+  });
 
   return (
     <Fragment>
@@ -224,31 +224,31 @@ export default function HomePage({ categories }) {
                       {category.attributes.title}
                     </NextButton>
                   )
-                )
+                );
               })}
             </Flex>
           </Box>
         </Box>
       </Box>
     </Fragment>
-  )
+  );
 }
 
 export const getStaticProps = async ({ req }) => {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const rawCategoriesData = await fetch(API_URL + "/api/categories/", {
     method: "GET",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-  })
+  });
 
-  const categoriesJson = await rawCategoriesData.json()
+  const categoriesJson = await rawCategoriesData.json();
 
   return {
     props: {
       categories: categoriesJson.data,
     },
-  }
-}
+  };
+};

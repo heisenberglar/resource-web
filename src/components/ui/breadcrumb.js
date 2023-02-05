@@ -1,10 +1,10 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
-import NextLink from "next/link"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 export default function BreadCrumb(router) {
-  const category = router?.router?.query?.category
-  const article = router?.router?.query?.slug
-  const resource = router?.router?.query?.resource
+  const category = router?.router?.query?.category;
+  const article = router?.router?.query?.slug;
+  const resource = router?.router?.query?.resource;
 
   return (
     <Breadcrumb spacing="8px" mb="5">
@@ -35,5 +35,5 @@ export default function BreadCrumb(router) {
         </BreadcrumbItem>
       )}
     </Breadcrumb>
-  )
+  );
 }

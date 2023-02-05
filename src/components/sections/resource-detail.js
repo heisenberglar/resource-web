@@ -7,14 +7,14 @@ import {
   VStack,
   Link,
   Button,
-} from "@chakra-ui/react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+} from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChalkboardTeacher,
   faAtom,
   faCommentsDollar,
   faLink,
-} from "@fortawesome/free-solid-svg-icons"
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function ResourceDetail({ resource, resourceInstance }) {
   return (
@@ -93,5 +93,5 @@ export default function ResourceDetail({ resource, resourceInstance }) {
         )}
       </Box>
     </Box>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import NextLink from "next/link"
-import { signIn, signOut, useSession } from "next-auth/react"
+import NextLink from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Box,
   Stack,
@@ -11,30 +11,30 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
 import {
   faSun,
   faMoon,
   faCaretDown,
   faUserAstronaut,
-} from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 
 export default function NavBar() {
-  const { data: session, status } = useSession()
-  const { colorMode, toggleColorMode } = useColorMode()
-  const [username, setUsername] = useState("Test")
+  const { data: session, status } = useSession();
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [username, setUsername] = useState("Test");
 
   function handleToggleTheme() {
-    toggleColorMode()
+    toggleColorMode();
   }
 
   useEffect(() => {
     if (status !== "loading" && session) {
-      setUsername(session.user.username)
+      setUsername(session.user.username);
     }
-  }, [status, session])
+  }, [status, session]);
 
   const allUserLinks = [
     {
@@ -42,7 +42,7 @@ export default function NavBar() {
       label: "Home",
       href: "/",
     },
-  ]
+  ];
 
   const authenticatedUserLinks = [
     // {
@@ -50,11 +50,11 @@ export default function NavBar() {
     //     label: "Profile",
     //     href: "/profile",
     // },
-  ]
+  ];
 
   function settingsDropdown() {
     if (!session) {
-      return false
+      return false;
     }
 
     if (status === "authenticated") {
@@ -85,8 +85,8 @@ export default function NavBar() {
               </NextLink>
               <MenuItem
                 onClick={(e) => {
-                  e.preventDefault()
-                  signOut()
+                  e.preventDefault();
+                  signOut();
                 }}
               >
                 <NextLink href="/api/auth/signout">Sign Out</NextLink>
@@ -94,13 +94,13 @@ export default function NavBar() {
             </MenuList>
           </Menu>
         </Box>
-      )
+      );
     }
   }
 
   function signInButton() {
     if (session) {
-      return false
+      return false;
     }
 
     return (
@@ -110,14 +110,14 @@ export default function NavBar() {
           minW="8rem"
           variant="outline"
           onClick={(e) => {
-            e.preventDefault()
-            signIn("google", { callbackUrl: "https://dynarank.io" })
+            e.preventDefault();
+            signIn("google", { callbackUrl: "https://dynarank.io" });
           }}
         >
           Sign In
         </Button>
       </Box>
-    )
+    );
   }
 
   const themeToggleButton = () => {
@@ -130,8 +130,8 @@ export default function NavBar() {
           onClick={handleToggleTheme}
         />
       </Box>
-    )
-  }
+    );
+  };
 
   return (
     <Box>
@@ -153,7 +153,7 @@ export default function NavBar() {
                         <a>{link.label}</a>
                       </NextLink>
                     </Box>
-                  )
+                  );
                 })}
                 {/* {session &&
                   authenticatedUserLinks.map((link) => {
@@ -178,5 +178,5 @@ export default function NavBar() {
         </Box>
       </Box>
     </Box>
-  )
+  );
 }

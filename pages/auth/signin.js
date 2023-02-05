@@ -1,6 +1,6 @@
-import { Box, Text } from "@chakra-ui/react"
-import { getProviders, signIn } from "next-auth/react"
-import NextLink from "next/link"
+import { Box, Text } from "@chakra-ui/react";
+import { getProviders, signIn } from "next-auth/react";
+import NextLink from "next/link";
 
 export default function SignIn({ providers }) {
   return (
@@ -17,12 +17,12 @@ export default function SignIn({ providers }) {
         <Text as="a">Terms of Service</Text>
       </NextLink>
     </Box>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {
-  const providers = await getProviders()
+  const providers = await getProviders();
   return {
     props: { providers },
-  }
+  };
 }

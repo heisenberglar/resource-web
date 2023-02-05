@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { useSession } from "next-auth/react"
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 import {
   Box,
   Input,
@@ -12,29 +12,29 @@ import {
   FormLabel,
   FormErrorMessage,
   Textarea,
-} from "@chakra-ui/react"
-import qs from "qs"
-import useDebounce from "src/components/__utils/debouncer"
+} from "@chakra-ui/react";
+import qs from "qs";
+import useDebounce from "src/components/__utils/debouncer";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ResourceSearchBar({ article }) {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
-  const [fetchedResources, setFetchedResources] = useState([])
-  const [wordEntered, setWordEntered] = useState("")
-  const [chosenResource, setChosenResource] = useState(null)
-  const toast = useToast()
-  const statuses = ["success", "error", "warning", "info"]
+  const [fetchedResources, setFetchedResources] = useState([]);
+  const [wordEntered, setWordEntered] = useState("");
+  const [chosenResource, setChosenResource] = useState(null);
+  const toast = useToast();
+  const statuses = ["success", "error", "warning", "info"];
 
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm()
+  } = useForm();
 
-  const primaryBackground = useColorModeValue("white", "gray.900")
+  const primaryBackground = useColorModeValue("white", "gray.900");
 
   useDebounce(
     () => {
@@ -56,7 +56,7 @@ export default function ResourceSearchBar({ article }) {
           {
             encodeValuesOnly: true,
           }
-        )
+        );
 
         const rawResources = await fetch(
           `${API_URL}/api/resources?` + resourceQuery,
@@ -67,27 +67,27 @@ export default function ResourceSearchBar({ article }) {
               Authorization: `Bearer ${session.jwt}`,
             },
           }
-        )
+        );
 
-        const resources = await rawResources.json()
-        setFetchedResources(resources?.data)
+        const resources = await rawResources.json();
+        setFetchedResources(resources?.data);
 
-        return resources
-      }
+        return resources;
+      };
 
       wordEntered
         ? fetchFilteredResources(wordEntered)
-        : setFetchedResources([])
+        : setFetchedResources([]);
     },
     [wordEntered],
     650
-  )
+  );
 
   function handleClick(resource) {
-    reset({})
+    reset({});
 
-    setChosenResource(resource)
-    setFetchedResources([])
+    setChosenResource(resource);
+    setFetchedResources([]);
   }
 
   async function onSubmit(resourceInstanceData) {
@@ -99,7 +99,7 @@ export default function ResourceSearchBar({ article }) {
         status: statuses[1],
         isClosable: true,
         position: "bottom-right",
-      })
+      });
     }
 
     const res = await fetch(`${API_URL}/api/resource-instances`, {
@@ -114,10 +114,10 @@ export default function ResourceSearchBar({ article }) {
           resource: chosenResource.id,
         },
       }),
-    })
+    });
 
-    const response = await res.json()
-    console.log(response)
+    const response = await res.json();
+    console.log(response);
 
     if (response.error) {
       toast({
@@ -126,7 +126,7 @@ export default function ResourceSearchBar({ article }) {
         status: statuses[1],
         isClosable: true,
         position: "bottom-right",
-      })
+      });
     } else {
       toast({
         title: "Resource added",
@@ -135,15 +135,15 @@ export default function ResourceSearchBar({ article }) {
         status: statuses[0],
         isClosable: true,
         position: "bottom-right",
-      })
-      clearInput()
+      });
+      clearInput();
     }
   }
 
   const clearInput = () => {
-    setFetchedResources([])
-    setWordEntered("")
-  }
+    setFetchedResources([]);
+    setWordEntered("");
+  };
 
   return (
     <Flex my={5} flexDirection="column" mx="auto" width={["100%", "80%"]}>
@@ -156,8 +156,8 @@ export default function ResourceSearchBar({ article }) {
         minH="3rem"
         value={chosenResource ? chosenResource?.attributes?.title : wordEntered}
         onChange={(e) => {
-          setChosenResource(null)
-          setWordEntered(e.target.value)
+          setChosenResource(null);
+          setWordEntered(e.target.value);
         }}
       ></Input>
       {fetchedResources?.length > 0 && !chosenResource ? (
@@ -178,7 +178,7 @@ export default function ResourceSearchBar({ article }) {
                   borderRadius: "3px",
                 }}
                 onClick={() => {
-                  handleClick(resource)
+                  handleClick(resource);
                 }}
               >
                 {resource.attributes.title}
@@ -186,7 +186,7 @@ export default function ResourceSearchBar({ article }) {
                   ? ` (${resource.attributes.creator})`
                   : null}
               </Box>
-            )
+            );
           })}
         </Box>
       ) : null}
@@ -228,5 +228,5 @@ export default function ResourceSearchBar({ article }) {
         </form>
       )}
     </Flex>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { Fragment } from "react"
-import { Container, useColorMode } from "@chakra-ui/react"
-import { DefaultSeo } from "next-seo"
-import Script from "next/script"
-import Head from "next/head"
-import "@fortawesome/fontawesome-svg-core/styles.css"
+import { Fragment } from "react";
+import { Container, useColorMode } from "@chakra-ui/react";
+import { DefaultSeo } from "next-seo";
+import Script from "next/script";
+import Head from "next/head";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 export default function Layout({ children, title }) {
-  const { colorMode, toggleColorMode } = useColorMode()
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Fragment>
       <Head>
@@ -35,5 +35,5 @@ export default function Layout({ children, title }) {
         <main>{children}</main>
       </Container>
     </Fragment>
-  )
+  );
 }

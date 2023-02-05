@@ -1,4 +1,4 @@
-import NextLink from "next/link"
+import NextLink from "next/link";
 import {
   Heading,
   Text,
@@ -7,20 +7,20 @@ import {
   Stack,
   Button,
   HStack,
-} from "@chakra-ui/react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+} from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChalkboardTeacher,
   faAtom,
   faStar,
   faTag,
-} from "@fortawesome/free-solid-svg-icons"
-import { CourseJsonLd } from "next-seo"
-import Layout from "src/components/layouts/layout"
+} from "@fortawesome/free-solid-svg-icons";
+import { CourseJsonLd } from "next-seo";
+import Layout from "src/components/layouts/layout";
 
 export default function ResourcePage(props) {
-  const { resource } = props
-  const resourceData = resource?.data?.attributes
+  const { resource } = props;
+  const resourceData = resource?.data?.attributes;
 
   return (
     <Layout title={resourceData?.title}>
@@ -105,7 +105,7 @@ export default function ResourcePage(props) {
         </Button>
       </Box>
     </Layout>
-  )
+  );
 }
 
 export async function getStaticProps({ params }) {
@@ -114,17 +114,17 @@ export async function getStaticProps({ params }) {
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     }
-  )
+  );
 
-  const resourceJson = await resource?.json()
+  const resourceJson = await resource?.json();
 
   return {
     props: { resource: resourceJson },
     revalidate: 60,
-  }
+  };
 }
 
 export async function getStaticPaths() {
@@ -133,18 +133,18 @@ export async function getStaticPaths() {
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     }
-  )
+  );
 
-  const parsedResources = await resources?.json()
+  const parsedResources = await resources?.json();
 
   const paths = parsedResources?.data?.map((resource) => ({
     params: {
       slug: resource?.attributes?.slug?.toString(),
     },
-  }))
+  }));
 
-  return { paths, fallback: false }
+  return { paths, fallback: false };
 }

@@ -1,51 +1,51 @@
-import { ChakraProvider } from "@chakra-ui/react"
-import theme from "/theme"
-import NavBar from "src/components/layouts/navbar"
-import Footer from "src/components/layouts/footer"
-import "@fortawesome/fontawesome-svg-core/styles.css"
-import { config } from "@fortawesome/fontawesome-svg-core"
-import Head from "next/head"
-import CookieConsent, { getCookieConsentValue } from "react-cookie-consent"
-import { useEffect } from "react"
-config.autoAddCss = false
-import * as gtag from "../src/lib/gtag"
-import { useRouter } from "next/router"
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "/theme";
+import NavBar from "src/components/layouts/navbar";
+import Footer from "src/components/layouts/footer";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import Head from "next/head";
+import CookieConsent, { getCookieConsentValue } from "react-cookie-consent";
+import { useEffect } from "react";
+config.autoAddCss = false;
+import * as gtag from "../src/lib/gtag";
+import { useRouter } from "next/router";
 
 export default function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }) {
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (getCookieConsentValue() === true) {
-      console.log("trued")
+      console.log("trued");
       window.gtag("consent", "update", {
         ad_storage: "granted",
         analytics_storage: "granted",
-      })
+      });
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (getCookieConsentValue() === true) {
       const handleRouteChange = (url) => {
-        gtag.pageview(url)
-      }
-      router.events.on("routeChangeComplete", handleRouteChange)
-      router.events.on("hashChangeComplete", handleRouteChange)
+        gtag.pageview(url);
+      };
+      router.events.on("routeChangeComplete", handleRouteChange);
+      router.events.on("hashChangeComplete", handleRouteChange);
       return () => {
-        router.events.off("routeChangeComplete", handleRouteChange)
-        router.events.off("hashChangeComplete", handleRouteChange)
-      }
+        router.events.off("routeChangeComplete", handleRouteChange);
+        router.events.off("hashChangeComplete", handleRouteChange);
+      };
     }
-  }, [router.events])
+  }, [router.events]);
 
   function handleAccept() {
     window.gtag("consent", "update", {
       ad_storage: "granted",
       analytics_storage: "granted",
-    })
+    });
   }
 
   return (
@@ -60,7 +60,7 @@ export default function MyApp({
           location="bottom"
           buttonText="Accept"
           onAccept={() => {
-            handleAccept()
+            handleAccept();
           }}
           enableDeclineButton
           declineButtonText="Decline"
@@ -90,5 +90,5 @@ export default function MyApp({
         <Footer />
       </ChakraProvider>
     </SessionProvider>
-  )
+  );
 }

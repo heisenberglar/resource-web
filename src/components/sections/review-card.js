@@ -1,18 +1,18 @@
-import { Text, Box, useColorModeValue } from "@chakra-ui/react"
-import NextLink from "next/link"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserAstronaut } from "@fortawesome/free-solid-svg-icons"
-import starMaker from "src/components/ui/star-maker"
-import relativeTime from "dayjs/plugin/relativeTime"
-import dayjs from "dayjs"
-dayjs.extend(relativeTime)
+import { Text, Box, useColorModeValue } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserAstronaut } from "@fortawesome/free-solid-svg-icons";
+import starMaker from "src/components/ui/star-maker";
+import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
+dayjs.extend(relativeTime);
 
 export default function ReviewCard({ review }) {
   const timeSinceCreated = dayjs(
     review.attributes.createdAt || review.attributes.updatedAt
-  ).fromNow(true)
-  const primaryBackground = useColorModeValue("white", "gray.900")
-  const reviewer = review.attributes.reviewer?.data?.attributes.username
+  ).fromNow(true);
+  const primaryBackground = useColorModeValue("white", "gray.900");
+  const reviewer = review.attributes.reviewer?.data?.attributes.username;
   return (
     <Box
       border="1px"
@@ -62,5 +62,5 @@ export default function ReviewCard({ review }) {
         </>
       )}
     </Box>
-  )
+  );
 }

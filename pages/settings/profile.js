@@ -1,5 +1,5 @@
-import Layout from "src/components/layouts/layout"
-import { useForm } from "react-hook-form"
+import Layout from "src/components/layouts/layout";
+import { useForm } from "react-hook-form";
 import {
   Flex,
   Box,
@@ -12,12 +12,12 @@ import {
   Button,
   Textarea,
   Divider,
-} from "@chakra-ui/react"
-import { useSession } from "next-auth/react"
-import LoginPrompt from "src/components/ui/loginPrompt"
-import { useEffect, useState } from "react"
-import LoadingPage from "src/components/ui/loadingPage"
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+} from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import LoginPrompt from "src/components/ui/loginPrompt";
+import { useEffect, useState } from "react";
+import LoadingPage from "src/components/ui/loadingPage";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ProfileSettings() {
   const {
@@ -25,18 +25,18 @@ export default function ProfileSettings() {
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm()
+  } = useForm();
 
-  const toast = useToast()
-  const statuses = ["success", "error", "warning", "info"]
+  const toast = useToast();
+  const statuses = ["success", "error", "warning", "info"];
 
-  const [username, setUsername] = useState("")
-  const [aboutMe, setAboutMe] = useState("")
-  const [socialsLinkedin, setSocialsLinkedin] = useState("")
-  const [socialsYoutube, setSocialsYoutube] = useState("")
-  const [socialOther, setSocialOther] = useState("")
+  const [username, setUsername] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
+  const [socialsLinkedin, setSocialsLinkedin] = useState("");
+  const [socialsYoutube, setSocialsYoutube] = useState("");
+  const [socialOther, setSocialOther] = useState("");
 
-  const { data: session, loading } = useSession()
+  const { data: session, loading } = useSession();
 
   const fetchProfileSettings = async () => {
     const res = await fetch(`${API_URL}/api/users/me?populate=socials`, {
@@ -44,28 +44,28 @@ export default function ProfileSettings() {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-    const profileSettings = await res.json()
+    });
+    const profileSettings = await res.json();
 
-    setUsername(profileSettings.username)
-    setAboutMe(profileSettings.about)
-    setSocialsLinkedin(profileSettings.socials?.linkedin)
-    setSocialsYoutube(profileSettings.socials?.youtube)
-    setSocialOther(profileSettings.socials?.other)
-  }
+    setUsername(profileSettings.username);
+    setAboutMe(profileSettings.about);
+    setSocialsLinkedin(profileSettings.socials?.linkedin);
+    setSocialsYoutube(profileSettings.socials?.youtube);
+    setSocialOther(profileSettings.socials?.other);
+  };
 
   useEffect(() => {
     if (!loading) {
-      fetchProfileSettings()
+      fetchProfileSettings();
     }
-  }, [loading])
+  }, [loading]);
 
   if (!session || loading) {
     return (
       <Layout title={"Profile settings"}>
         <LoginPrompt />
       </Layout>
-    )
+    );
   }
 
   async function onSubmit(userData) {
@@ -75,25 +75,25 @@ export default function ProfileSettings() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ data: userData }),
-    })
+    });
 
-    const response = await res.json()
-    console.log(response)
+    const response = await res.json();
+    console.log(response);
 
     if (response.error) {
-      console.log(response.error)
+      console.log(response.error);
       toast({
         title: response.error.message,
         description: "We're not in the right place. Let's try that again.",
         status: statuses[1],
         position: "top-right",
-      })
+      });
     } else {
       toast({
         title: "User profile updated",
         status: statuses[0],
         position: "top-right",
-      })
+      });
     }
   }
 
@@ -189,5 +189,5 @@ export default function ProfileSettings() {
         </Box>
       </Flex>
     </Layout>
-  )
+  );
 }

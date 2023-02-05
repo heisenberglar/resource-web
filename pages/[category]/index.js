@@ -8,31 +8,31 @@ import {
   useColorModeValue,
   Button,
   useMediaQuery,
-} from "@chakra-ui/react"
-import NextLink from "next/link"
-import { CollectionPageJsonLd } from "next-seo"
-import NextButton from "src/components/ui/next-button"
-import { useRouter } from "next/router"
-import BreadCrumb from "src/components/ui/breadcrumb"
-import qs from "qs"
-import LoadingPage from "src/components/ui/loadingPage"
-import Layout from "src/components/layouts/layout"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
-dayjs.extend(relativeTime)
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import { CollectionPageJsonLd } from "next-seo";
+import NextButton from "src/components/ui/next-button";
+import { useRouter } from "next/router";
+import BreadCrumb from "src/components/ui/breadcrumb";
+import qs from "qs";
+import LoadingPage from "src/components/ui/loadingPage";
+import Layout from "src/components/layouts/layout";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+dayjs.extend(relativeTime);
 
 export default function CategoryPage({ articles, category }) {
-  const router = useRouter()
-  const hasArticles = Boolean(articles?.length)
+  const router = useRouter();
+  const hasArticles = Boolean(articles?.length);
 
-  const primaryBackground = useColorModeValue("white", "gray.900")
-  const secondaryBackground = useColorModeValue("blackAlpha.50", "gray.700")
-  const textColor = useColorModeValue("gray.800", "gray.100")
-  const [isDesktop] = useMediaQuery("(min-width: 800px)")
+  const primaryBackground = useColorModeValue("white", "gray.900");
+  const secondaryBackground = useColorModeValue("blackAlpha.50", "gray.700");
+  const textColor = useColorModeValue("gray.800", "gray.100");
+  const [isDesktop] = useMediaQuery("(min-width: 800px)");
 
-  if (!articles || !category) return <LoadingPage />
+  if (!articles || !category) return <LoadingPage />;
   return (
     <Layout title={category?.attributes?.title}>
       <BreadCrumb router={router} />
@@ -53,17 +53,18 @@ export default function CategoryPage({ articles, category }) {
                   keywords: article?.attributes?.tags
                     ? article?.attributes?.tags
                     : null,
-                }
-              } else return
+                };
+              } else return;
             })}
           />
           <Flex my="1rem" justifyContent="center" flexFlow="wrap">
             {articles.map((article) => {
               const lastUpdated =
-                article?.attributes?.updatedAt || article?.attributes?.createdAt
-              const timeSinceUpdate = dayjs(lastUpdated).fromNow(true)
+                article?.attributes?.updatedAt ||
+                article?.attributes?.createdAt;
+              const timeSinceUpdate = dayjs(lastUpdated).fromNow(true);
               const writer =
-                article?.attributes?.writer?.data?.attributes?.username
+                article?.attributes?.writer?.data?.attributes?.username;
 
               return (
                 <LinkBox
@@ -128,7 +129,7 @@ export default function CategoryPage({ articles, category }) {
                     </Box>
                   )}
                 </LinkBox>
-              )
+              );
             })}
           </Flex>
         </Box>
@@ -162,24 +163,24 @@ export default function CategoryPage({ articles, category }) {
         </Button>
       </Flex>
     </Layout>
-  )
+  );
 }
 
 export async function getStaticProps(context) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchedCategory = await fetch(
     API_URL + `/api/categories?filters[slug]=${context?.params?.category}`,
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     }
-  )
-  const categoryJson = await fetchedCategory?.json()
+  );
+  const categoryJson = await fetchedCategory?.json();
 
-  if (!categoryJson?.data?.length) return { props: {}, notFound: true }
+  if (!categoryJson?.data?.length) return { props: {}, notFound: true };
 
   const articlesQuery = qs.stringify(
     {
@@ -203,40 +204,40 @@ export async function getStaticProps(context) {
     {
       encodeValuesOnly: true,
     }
-  )
+  );
 
   const fetchedArticles = await fetch(
     API_URL + `/api/articles?${articlesQuery}`,
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     }
-  )
-  const articlesJson = await fetchedArticles?.json()
+  );
+  const articlesJson = await fetchedArticles?.json();
 
   return {
     props: { articles: articlesJson?.data, category: categoryJson?.data[0] },
     revalidate: 60,
-  }
+  };
 }
 
 export async function getStaticPaths() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchedCategories = await fetch(API_URL + "/api/categories", {
     method: "GET",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-  })
-  const categoriesJson = await fetchedCategories?.json()
-  const categories = categoriesJson?.data
+  });
+  const categoriesJson = await fetchedCategories?.json();
+  const categories = categoriesJson?.data;
 
   const paths = categories?.map((category) => ({
     params: { category: category?.attributes?.slug?.toString() },
-  }))
+  }));
 
-  return { paths, fallback: true }
+  return { paths, fallback: true };
 }

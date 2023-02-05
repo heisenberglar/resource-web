@@ -1,5 +1,5 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
-import NextLink from "next/link"
+import { Box, Flex, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 export default function Footer() {
   return (
@@ -34,5 +34,5 @@ export default function Footer() {
         </Flex>
       </Flex>
     </footer>
-  )
+  );
 }

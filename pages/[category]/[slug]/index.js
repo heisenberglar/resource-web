@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   Heading,
   Text,
@@ -7,38 +7,38 @@ import {
   Button,
   useColorModeValue,
   useMediaQuery,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
 
-import { NextSeo, ArticleJsonLd } from "next-seo"
-import qs from "qs"
-import NextLink from "next/link"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserAstronaut, faPlus } from "@fortawesome/free-solid-svg-icons"
-import BreadCrumb from "src/components/ui/breadcrumb"
-import { useRouter } from "next/router"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
-import LoadingPage from "src/components/ui/loadingPage"
-import ArticleLayout from "src/components/layouts/articleLayout"
-dayjs.extend(relativeTime)
+import { NextSeo, ArticleJsonLd } from "next-seo";
+import qs from "qs";
+import NextLink from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserAstronaut, faPlus } from "@fortawesome/free-solid-svg-icons";
+import BreadCrumb from "src/components/ui/breadcrumb";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import LoadingPage from "src/components/ui/loadingPage";
+import ArticleLayout from "src/components/layouts/articleLayout";
+dayjs.extend(relativeTime);
 
-const nextUrl = process.env.NEXT_PUBLIC_URL
+const nextUrl = process.env.NEXT_PUBLIC_URL;
 
 function ArticlePage(props) {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [isDesktop] = useMediaQuery("(min-width: 800px)")
+  const [isDesktop] = useMediaQuery("(min-width: 800px)");
 
-  const { articleJson, categorySlug, resourceInstances } = props
+  const { articleJson, categorySlug, resourceInstances } = props;
 
-  if (!articleJson || router.isFallback) return <LoadingPage />
+  if (!articleJson || router.isFallback) return <LoadingPage />;
 
-  const article = articleJson?.data[0]?.attributes
-  const articleUrl = `${nextUrl}/${categorySlug}/${article.slug}`
+  const article = articleJson?.data[0]?.attributes;
+  const articleUrl = `${nextUrl}/${categorySlug}/${article.slug}`;
 
-  const writer = article.writer?.data?.attributes.username
-  const lastUpdated = article.updatedAt || article.createdAt
-  const timeSinceUpdate = dayjs(lastUpdated).fromNow(true)
+  const writer = article.writer?.data?.attributes.username;
+  const lastUpdated = article.updatedAt || article.createdAt;
+  const timeSinceUpdate = dayjs(lastUpdated).fromNow(true);
 
   return (
     <ArticleLayout title={article.title}>
@@ -153,14 +153,14 @@ function ArticlePage(props) {
         </Box>
       </article>
     </ArticleLayout>
-  )
+  );
 }
 
 export async function getStaticProps(context) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   if (!(context.params.category && context.params.slug))
-    return { props: {}, notFound: true }
+    return { props: {}, notFound: true };
 
   const articleQuery = qs.stringify(
     {
@@ -179,17 +179,17 @@ export async function getStaticProps(context) {
     {
       encodeValuesOnly: true,
     }
-  )
+  );
 
   const article = await fetch(`${API_URL}/api/articles?${articleQuery}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-  })
-  const articleJson = await article.json()
+  });
+  const articleJson = await article.json();
 
-  if (!articleJson?.data?.length) return { props: {}, notFound: true }
+  if (!articleJson?.data?.length) return { props: {}, notFound: true };
 
   const resourceInstancesQuery = qs.stringify(
     {
@@ -211,7 +211,7 @@ export async function getStaticProps(context) {
     {
       encodeValuesOnly: true,
     }
-  )
+  );
 
   const fetchedResourceInstances = await fetch(
     API_URL + `/api/resource-instances?` + resourceInstancesQuery,
@@ -221,9 +221,9 @@ export async function getStaticProps(context) {
         "Content-Type": "application/json",
       },
     }
-  )
+  );
 
-  const resourceInstancesJson = await fetchedResourceInstances.json()
+  const resourceInstancesJson = await fetchedResourceInstances.json();
 
   const topReviewQuery = (instanceId) =>
     qs.stringify(
@@ -247,7 +247,7 @@ export async function getStaticProps(context) {
       {
         encodeValuesOnly: true,
       }
-    )
+    );
 
   const resourceInstancesWithReview = await Promise.all(
     resourceInstancesJson?.data?.map(async (instance) => {
@@ -259,12 +259,12 @@ export async function getStaticProps(context) {
             "Content-Type": "application/json",
           },
         }
-      )
+      );
 
-      instance.attributes.review = await topReview?.json()
-      return instance
+      instance.attributes.review = await topReview?.json();
+      return instance;
     })
-  )
+  );
 
   return {
     props: {
@@ -273,11 +273,11 @@ export async function getStaticProps(context) {
       resourceInstances: resourceInstancesWithReview || [],
     },
     revalidate: 60,
-  }
+  };
 }
 
 export async function getStaticPaths() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchedArticles = await fetch(
     API_URL + "/api/articles?fields[0]=slug&populate[category][fields][0]=slug",
@@ -287,17 +287,17 @@ export async function getStaticPaths() {
         "Content-Type": "application/json",
       },
     }
-  )
-  const articles = await fetchedArticles?.json()
+  );
+  const articles = await fetchedArticles?.json();
 
   const paths = await articles?.data?.map((article) => ({
     params: {
       category: article.attributes?.category?.data?.attributes?.slug,
       slug: article.attributes?.slug,
     },
-  }))
+  }));
 
-  return { paths, fallback: true }
+  return { paths, fallback: true };
 }
 
-export default ArticlePage
+export default ArticlePage;
